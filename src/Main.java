@@ -1,9 +1,9 @@
-import SimStation.SimPanel;
-import SimStation.SimFactory;
+import simstation.WorldPanel;
+import simstation.WorldFactory;
 
 public class Main {
     public static void main(String[] args) {
-        SimPanel app = new SimPanel(new SimFactory());
+        WorldPanel app = new WorldPanel(new WorldFactory());
         app.display();
     }
 }

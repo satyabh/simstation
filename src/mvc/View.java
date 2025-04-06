@@ -1,6 +1,5 @@
 package mvc;
 
-import tools.Subscriber;
 import javax.swing.*;
 import java.awt.*;
 

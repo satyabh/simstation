@@ -1,6 +1,4 @@
-package tools;
-
-import mvc.Model;
+package mvc;
 
 public abstract class Command {
     protected final Model model;

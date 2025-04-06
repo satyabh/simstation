@@ -1,6 +1,4 @@
-package tools;
-
-import mvc.Model;
+package mvc;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;

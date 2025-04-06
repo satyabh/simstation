@@ -1,6 +1,5 @@
 package mvc;
 
-import tools.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

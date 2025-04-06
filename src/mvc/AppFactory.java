@@ -1,7 +1,5 @@
 package mvc;
 
-import tools.Command;
-
 public interface AppFactory {
     Model makeModel();
 

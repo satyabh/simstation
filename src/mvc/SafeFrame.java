@@ -2,7 +2,6 @@ package mvc;
 
 import javax.swing.*;
 import java.awt.event.WindowEvent;
-import tools.Utilities;
 
 public class SafeFrame extends JFrame {
 

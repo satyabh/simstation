@@ -1,7 +1,5 @@
 package mvc;
 
-import tools.Publisher;
-
 import java.io.Serial;
 import java.io.Serializable;
 
