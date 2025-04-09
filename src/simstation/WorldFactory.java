@@ -1,48 +1,48 @@
 package simstation;
 
 import mvc.*;
-import mvc.Command;
-import mvc.Utilities;
 
-public class WorldFactory implements AppFactory {
-    @Override
-    public Model makeModel() {
-        return new World();
-    }
+public abstract class WorldFactory implements AppFactory {
+    public abstract Model makeModel();
 
-    @Override
     public View makeView(Model model) {
-        return new WorldView((World) model);
-    }
-
-    @Override
-    public String getTitle() {
-        return "simstation";
-    }
-
-    @Override
-    public String getAbout() {
-        return "Team 5, 2025. All rights reserved.";
-    }
-
-    @Override
-    public String getHelp() {
-        return Utilities.buildMultilineString(
-                "Save: Save minefield to file",
-                "Save As: Save minefield to new file",
-                "Open: Open new minefield from file",
-                "Quit: Quit the program",
-                "Edit: Move in the specified direction"
-        );
+        return new WorldView((World)model);
     }
 
     @Override
     public String[] getEditCommands() {
-        return new String[]{""};
+        return new String[] {"Start", "Suspend", "Resume", "Stop", "Stats"};
     }
 
     @Override
     public Command makeEditCommand(String name, Model model) {
-        return null;
+        World world = (World)model;
+        switch(name) {
+            case "Start": return new StartCommand(world);
+            case "Stop": return new StopCommand(world);
+            case "Suspend": return new SuspendCommand(world);
+            case "Resume": return new ResumeCommand(world);
+            case "Stats": return new StatsCommand(world);
+            default: return null;
+        }
+    }
+
+    @Override
+    public String getTitle() {
+        return "SimStation";
+    }
+
+    @Override
+    public String getHelp() {
+        return "Start: Starts the simulation\n" +
+                "Stop: Stops the simulation\n" +
+                "Suspend: Pauses the simulation\n" +
+                "Resume: Resumes the simulation\n" +
+                "Stats: Shows statistics";
+    }
+
+    @Override
+    public String getAbout() {
+        return "SimStation v2.0\nAuthor: Your Name";
     }
 }
