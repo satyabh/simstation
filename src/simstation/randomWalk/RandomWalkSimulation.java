@@ -4,6 +4,9 @@ package simstation.randomWalk;
 import mvc.*;
 import simstation.*;
 
+import javax.swing.*;
+import java.awt.*;
+
 class Drunk extends MobileAgent {
 
     public Drunk() {
@@ -34,6 +37,8 @@ public class RandomWalkSimulation extends World {
     public static void main(String[] args) {
         AppPanel panel = new WorldPanel(new RandomWalkFactory());
         panel.display();
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(panel);
+        frame.pack(); // sets the window size to whatever needs
+        frame.setResizable(false);  // locks and prevents user from resizing
     }
-
 }

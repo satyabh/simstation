@@ -11,7 +11,6 @@ public class WorldPanel extends AppPanel {
 
     public WorldPanel(WorldFactory factory) {
         super(factory);
-
         threadPanel.setLayout(new GridLayout(5, 1));
         threadPanel.setOpaque(false);
 

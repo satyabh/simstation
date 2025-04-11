@@ -10,6 +10,7 @@ public class WorldView extends View {
 
     public WorldView(World world) {
         super(world);
+        world.subscribe(this);
         setBackground(Color.WHITE);
         setPreferredSize(new Dimension(World.SIZE, World.SIZE));
     }
