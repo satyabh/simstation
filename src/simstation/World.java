@@ -140,10 +140,10 @@ public abstract class World extends Model {
         }
     }
 
-    public String[] getStats() {
-        String[] stats = new String[2];
-        stats[0] = "#agents = " + agents.size();
-        stats[1] = "clock = " + getClock();
+    public ArrayList<String> getStats() {
+        ArrayList<String> stats = new ArrayList<>();
+        stats.add("#agents = " + getPopulation());
+        stats.add("clock = " + getClock());
         return stats;
     }
 }

@@ -2,6 +2,8 @@ package simstation;
 
 import mvc.*;
 
+import java.util.ArrayList;
+
 public class StatsCommand extends Command {
     public StatsCommand(Model model) {
         super(model);
@@ -10,7 +12,7 @@ public class StatsCommand extends Command {
     @Override
     public void execute() {
         World world = (World)model;
-        String[] stats = world.getStats();
-        Utilities.inform(stats);
+        ArrayList<String> stats = world.getStats();
+        Utilities.inform(String.join("\n", stats));
     }
 }
