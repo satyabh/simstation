@@ -100,6 +100,8 @@ public abstract class World extends Model {
             for (Agent agent : agents) {
                 agent.start();
             }
+            observer = new ObserverAgent();
+            observer.setWorld(this);
             observer.start();
             changed();
         }
@@ -112,7 +114,8 @@ public abstract class World extends Model {
                 agent.stop();
             }
             agents.clear();
-            observer.stop();
+            observer.suspend();
+            clock = 0;
             changed();
         }
     }
@@ -140,7 +143,7 @@ public abstract class World extends Model {
     public String[] getStats() {
         String[] stats = new String[2];
         stats[0] = "#agents = " + agents.size();
-        stats[1] = "clock = " + clock;
+        stats[1] = "clock = " + getClock();
         return stats;
     }
 }
