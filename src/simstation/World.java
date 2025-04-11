@@ -111,6 +111,7 @@ public abstract class World extends Model {
             for (Agent agent : agents) {
                 agent.stop();
             }
+            agents.clear();
             observer.stop();
             changed();
         }

@@ -12,7 +12,7 @@ public class WorldPanel extends AppPanel {
     public WorldPanel(WorldFactory factory) {
         super(factory);
 
-        threadPanel.setLayout(new GridLayout(1, 5));
+        threadPanel.setLayout(new GridLayout(5, 1));
         threadPanel.setOpaque(false);
 
         // Create buttons in thread panel
