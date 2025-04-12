@@ -3,7 +3,6 @@ package simstation;
 import mvc.*;
 import java.awt.*;
 import java.util.Iterator;
-import javax.swing.*;
 
 public class WorldView extends View {
     private static final int AGENT_SIZE = 10; // Diameter 10 as specified
@@ -11,7 +10,7 @@ public class WorldView extends View {
     public WorldView(World world) {
         super(world);
         world.subscribe(this);
-        setBackground(Color.WHITE);
+        setBackground(Color.GRAY);
         setPreferredSize(new Dimension(World.SIZE, World.SIZE));
     }
 
@@ -22,7 +21,7 @@ public class WorldView extends View {
         Graphics2D gc2d = (Graphics2D)gc;
 
         // Draw a border around the world
-        gc2d.setColor(Color.BLACK);
+        gc2d.setColor(Color.BLUE);
         gc2d.drawRect(0, 0, World.SIZE - 1, World.SIZE - 1);
 
         // Draw agents
@@ -37,10 +36,10 @@ public class WorldView extends View {
         Graphics2D gc2d = (Graphics2D)gc;
         gc2d.setColor(Color.RED);
         gc2d.fillOval(
-                a.getX() - AGENT_SIZE/2,
-                a.getY() - AGENT_SIZE/2,
-                AGENT_SIZE,
-                AGENT_SIZE
+            a.getX() - AGENT_SIZE/2,
+            a.getY() - AGENT_SIZE/2,
+            AGENT_SIZE,
+            AGENT_SIZE
         );
     }
 

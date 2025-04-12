@@ -15,7 +15,7 @@ public abstract class WorldFactory implements AppFactory {
     }
 
     @Override
-    public Command makeEditCommand(String name, Model model) {
+    public Command makeEditCommand(Model model, String name, Object source) {
         World world = (World)model;
         switch(name) {
             case "Start": return new StartCommand(world);

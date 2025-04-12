@@ -4,14 +4,13 @@ import mvc.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
 
 public class WorldPanel extends AppPanel {
     public JPanel threadPanel = new JPanel();
 
     public WorldPanel(WorldFactory factory) {
         super(factory);
-        threadPanel.setLayout(new GridLayout(5, 1));
+        threadPanel.setLayout(new GridLayout(1, 5));
         threadPanel.setOpaque(false);
 
         // Create buttons in thread panel

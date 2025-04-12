@@ -5,7 +5,7 @@ import java.awt.Point;
 import java.util.*;
 
 public abstract class World extends Model {
-    public static final int SIZE = 250;
+    public static final int SIZE = 550;
 
     protected int clock;
     protected int alive;
@@ -84,7 +84,7 @@ public abstract class World extends Model {
     }
 
     // When model changes
-    protected void changed() {
+    public void changed() {
         setUnsavedChanges(true);
         notifySubscribers();
     }
