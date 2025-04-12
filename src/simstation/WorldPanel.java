@@ -1,20 +1,19 @@
 package simstation;
 
 import mvc.*;
+
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
 
 public class WorldPanel extends AppPanel {
-
     public JPanel threadPanel = new JPanel();
 
     public WorldPanel(WorldFactory factory) {
         super(factory);
-
         threadPanel.setLayout(new GridLayout(1, 5));
         threadPanel.setOpaque(false);
 
+        // Create buttons in thread panel
         JPanel p = new JPanel();
         p.setOpaque(false);
         JButton button = new JButton("Start");
@@ -24,7 +23,7 @@ public class WorldPanel extends AppPanel {
 
         p = new JPanel();
         p.setOpaque(false);
-        button = new JButton("Pause");
+        button = new JButton("Suspend");
         button.addActionListener(this);
         p.add(button);
         threadPanel.add(p);
@@ -50,24 +49,23 @@ public class WorldPanel extends AppPanel {
         p.add(button);
         threadPanel.add(p);
 
+        // Add thread panel to control panel
         controlPanel.setLayout(new BorderLayout());
-
         p = new JPanel();
         p.setOpaque(false);
         p.add(threadPanel);
-
-        controlPanel.add(p,  BorderLayout.NORTH);
+        controlPanel.add(p, BorderLayout.NORTH);
     }
 
+    @Override
     public void setModel(Model m) {
         super.setModel(m);
         World w = (World)m;
-        Iterator<Agent> it = w.iterator();
-        while(it.hasNext()) {
-            Thread t = new Thread(it.next());
-            t.start();
-        }
+        // No need to start threads here as it's handled by startAgents
     }
 
-
+    @Override
+    public void update() {
+        view.repaint();
+    }
 }
