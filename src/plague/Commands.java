@@ -46,6 +46,20 @@ class setVirulence extends Command {
     }
 }
 
+class setResistance extends Command {
+    Integer value = null;
+
+    public setResistance(Model m) { super(m); }
+
+    public void execute() throws Exception {
+        if (value == null) {
+            String response = Utilities.ask("Resistance to infection = ?");
+            value = Integer.valueOf(response);
+        }
+        ((Plague)model).setResistance(value);
+    }
+}
+
 class SetRecoveryTime extends Command {
     Integer value = null;
 

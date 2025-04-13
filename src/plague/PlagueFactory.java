@@ -15,7 +15,7 @@ class PlagueFactory extends WorldFactory {
         return new PlagueView((World)model);
     }
     public String[] getEditCommands() {
-        return new String[] { "Start", "Pause", "Resume", "Stop", "Stats", "Initial % infected", "Infection Probability", "Initial Population Size", "Fatality/Recovery Time", "Toggle Fatal"};
+        return new String[] { "Start", "Pause", "Resume", "Stop", "Stats", "Initial % infected", "Infection Probability", "Initial Population Size", "Fatality/Recovery Time", "Resistance", "Toggle Fatal"};
     }
     public Command makeEditCommand(Model model, String type,  Object source) {
         Command cmmd = super.makeEditCommand(model, type, source);
@@ -40,6 +40,8 @@ class PlagueFactory extends WorldFactory {
                 if (source instanceof JSlider) {
                    //((SetRecoveryTime)cmmd).value = ((JSlider)source).getValue();
                 }
+            } else if (type.equals("Resistance")) {
+                cmmd = new setResistance(model);
             } else if (type.equals("Fatal") || type.equals("Not Fatal") || type.equals("Toggle Fatal")) {
                 cmmd = new TriggerFatal(model);
             }

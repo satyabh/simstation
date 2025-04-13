@@ -7,13 +7,14 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import simstation.WorldPanel;
 
 class PlaguePanel extends WorldPanel implements ChangeListener {
     JPanel panelButtons = new JPanel();
-    JSlider[] sliders = new JSlider[4];
+    JSlider[] sliders = new JSlider[5];
     JButton FatalBtn = new JButton();
 
     public PlaguePanel(PlagueFactory factory) {
@@ -44,6 +45,13 @@ class PlaguePanel extends WorldPanel implements ChangeListener {
         sliders[3].setMajorTickSpacing(3);
         sliders[3].setLabelTable(sliders[3].createStandardLabels(50));
         sliders[3].setPreferredSize(new Dimension(420, 50));
+
+        sliders[4] = new JSlider(JSlider.HORIZONTAL, 0, 100, Plague.RESISTANCE);
+        sliders[4].setMinorTickSpacing(1);
+        sliders[4].setMajorTickSpacing(3);
+        sliders[4].setLabelTable(sliders[4].createStandardLabels(10));
+        sliders[4].setPreferredSize(new Dimension(420, 50));
+
         FatalBtn = new JButton();
         FatalBtn.setText(Plague.FATAL ? "Fatal" : "Not Fatal");
         
@@ -51,11 +59,13 @@ class PlaguePanel extends WorldPanel implements ChangeListener {
         sliders[1].addChangeListener(this);
         sliders[2].addChangeListener(this);
         sliders[3].addChangeListener(this);
+        sliders[4].addChangeListener(this);
         FatalBtn.addActionListener(this);
 
         // Sliders
         int sliderLabelsSize = factory.getEditCommands().length;
-        String[] sliderLabels = Arrays.copyOfRange(factory.getEditCommands(), sliderLabelsSize - 5, sliderLabelsSize);
+        String[] sliderLabels = Arrays.copyOfRange(factory.getEditCommands(), sliderLabelsSize - 6, sliderLabelsSize - 1);
+        // adjusted list of commands to exclude the first 5 threadPanel buttons, as well as the "Toggle Button" edit command
         for (int i = 0; i < sliders.length; i++) {
             sliders[i].setPaintTicks(true);
             sliders[i].setPaintLabels(true);
@@ -102,6 +112,9 @@ class PlaguePanel extends WorldPanel implements ChangeListener {
         if (e.getSource() == sliders[3]) {
             ((Plague)model).SetRecoveryTime(sliders[3].getValue());
         }
+        if (e.getSource() == sliders[4]) {
+            ((Plague)model).setResistance(sliders[4].getValue());
+        }
         if (e.getSource() == FatalBtn) {
             ((Plague)model).triggerFatal();
         }
@@ -113,6 +126,7 @@ class PlaguePanel extends WorldPanel implements ChangeListener {
         sliders[1].setValue(Plague.VIRULENCE);
         sliders[2].setValue(Plague.INITIAL_POPULATION_SIZE);
         sliders[3].setValue(Plague.RECOVERY_FATALITY_TIME);
+        sliders[4].setValue(Plague.RESISTANCE);
         FatalBtn.setText(Plague.FATAL ? "Fatal" : "Not Fatal");
         controlPanel.revalidate();
         controlPanel.repaint();

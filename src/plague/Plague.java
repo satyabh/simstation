@@ -23,9 +23,11 @@ class Person extends MobileAgent {
 
         // Infect neighbor
         if (this.infected && neighbor != null && !neighbor.isInfected()) {
-            if (Math.random() < (Plague.VIRULENCE / 100.0)) {
-                ((Person)neighbor).setInfected(true);
-                ((Person)neighbor).setInfectedStartClock(world.getClock());
+            if (Math.random() < (Plague.VIRULENCE / 100.0)) { // infection attempts to infect person
+                if (Math.random() > Plague.RESISTANCE / 100.0) { // person has a second chance, usually low
+                    ((Person)neighbor).setInfected(true);
+                    ((Person)neighbor).setInfectedStartClock(world.getClock());
+                }
             }
         }
 
@@ -53,7 +55,7 @@ public class Plague extends World {
     public static int RECOVERY_FATALITY_TIME = 50;
     public static boolean FATAL = true; // whether the end of infection lifespan kills the Person
     public static int VIRULENCE = 50; // % chance of infection
-    // public static int RESISTANCE = 2; // % chance of resisting infection
+    public static int RESISTANCE = 2; // % chance of resisting infection
     // RESISTANCE comes from assignment's page example, but Idk what to do with it 😭
 
     public void populate() {
@@ -71,6 +73,11 @@ public class Plague extends World {
 
     public void SetRecoveryTime(int value) {
         RECOVERY_FATALITY_TIME = value;
+        changed();
+    }
+
+    public void setResistance(int value) {
+        RESISTANCE = value;
         changed();
     }
 
