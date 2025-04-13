@@ -18,33 +18,34 @@ class PlaguePanel extends WorldPanel implements ChangeListener {
 
     public PlaguePanel(PlagueFactory factory) {
         super(factory);
+        model.subscribe(this);
 
         panelButtons.setLayout(new GridLayout(6, 1));
         panelButtons.setOpaque(false);
 
-        sliders[0] = new JSlider(JSlider.HORIZONTAL, 0, 100, 10);
+        sliders[0] = new JSlider(JSlider.HORIZONTAL, 0, 100, Plague.INITIAL_INFECTED);
         sliders[0].setMinorTickSpacing(1);
         sliders[0].setMajorTickSpacing(3);
         sliders[0].setLabelTable(sliders[0].createStandardLabels(10));
         
-        sliders[1] = new JSlider(JSlider.HORIZONTAL, 0, 100, 50);
+        sliders[1] = new JSlider(JSlider.HORIZONTAL, 0, 100, Plague.VIRULENCE);
         sliders[1].setMinorTickSpacing(1);
         sliders[1].setMajorTickSpacing(3);
         sliders[1].setLabelTable(sliders[1].createStandardLabels(10));
 
-        sliders[2] = new JSlider(JSlider.HORIZONTAL, 0, 200, 50);
+        sliders[2] = new JSlider(JSlider.HORIZONTAL, 0, 200, Plague.INITIAL_POPULATION_SIZE);
         sliders[2].setMinorTickSpacing(1);
         sliders[2].setMajorTickSpacing(3);
         sliders[2].setLabelTable(sliders[2].createStandardLabels(20));
         sliders[2].setPreferredSize(new Dimension(420, 50));
 
-        sliders[3] = new JSlider(JSlider.HORIZONTAL, 0, 500, 200);
+        sliders[3] = new JSlider(JSlider.HORIZONTAL, 0, 500, Plague.RECOVERY_FATALITY_TIME);
         sliders[3].setMinorTickSpacing(1);
         sliders[3].setMajorTickSpacing(3);
         sliders[3].setLabelTable(sliders[3].createStandardLabels(50));
         sliders[3].setPreferredSize(new Dimension(420, 50));
-
-        FatalBtn = new JButton("Not Fatal");
+        FatalBtn = new JButton();
+        FatalBtn.setText(Plague.FATAL ? "Fatal" : "Not Fatal");
         
         sliders[0].addChangeListener(this);
         sliders[1].addChangeListener(this);
@@ -101,10 +102,9 @@ class PlaguePanel extends WorldPanel implements ChangeListener {
         if (e.getSource() == sliders[3]) {
             ((Plague)model).SetRecoveryTime(sliders[3].getValue());
         }
-        if (e.getSource() == "Not Fatal") {
+        if (e.getSource() == FatalBtn) {
             ((Plague)model).triggerFatal();
         }
-        
         ((Plague)model).changed();
     }
 
@@ -113,6 +113,9 @@ class PlaguePanel extends WorldPanel implements ChangeListener {
         sliders[1].setValue(Plague.VIRULENCE);
         sliders[2].setValue(Plague.INITIAL_POPULATION_SIZE);
         sliders[3].setValue(Plague.RECOVERY_FATALITY_TIME);
+        FatalBtn.setText(Plague.FATAL ? "Fatal" : "Not Fatal");
+        controlPanel.revalidate();
+        controlPanel.repaint();
         repaint();
     }
 }

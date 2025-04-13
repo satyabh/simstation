@@ -15,7 +15,7 @@ class PlagueFactory extends WorldFactory {
         return new PlagueView((World)model);
     }
     public String[] getEditCommands() {
-        return new String[] { "Start", "Pause", "Resume", "Stop", "Stats", "Initial % infected", "Infection Probability", "Initial Population Size", "Fatality/Recovery Time", "Not Fatal"};
+        return new String[] { "Start", "Pause", "Resume", "Stop", "Stats", "Initial % infected", "Infection Probability", "Initial Population Size", "Fatality/Recovery Time", "Toggle Fatal"};
     }
     public Command makeEditCommand(Model model, String type,  Object source) {
         Command cmmd = super.makeEditCommand(model, type, source);
@@ -33,18 +33,15 @@ class PlagueFactory extends WorldFactory {
             } else if (type.equals("Infection Probability")) {
                 cmmd = new setVirulence(model);
                 if (source instanceof JSlider) {
-                   // ((setVirulence)cmmd).value = ((JSlider)source).getValue();
+                   //((setVirulence)cmmd).value = ((JSlider)source).getValue();
                 }
             } else if (type.equals("Fatality/Recovery Time")) {
                 cmmd = new SetRecoveryTime(model);
                 if (source instanceof JSlider) {
-                   // ((SetRecoveryTime)cmmd).value = ((JSlider)source).getValue();
+                   //((SetRecoveryTime)cmmd).value = ((JSlider)source).getValue();
                 }
-            } else if (type.equals("Not Fatal")) {
+            } else if (type.equals("Fatal") || type.equals("Not Fatal") || type.equals("Toggle Fatal")) {
                 cmmd = new TriggerFatal(model);
-                if (source instanceof JSlider) {
-                   // ((TriggerFatal)cmmd).value = ((JSlider)source).getValue();
-                }
             }
         }
         return cmmd;

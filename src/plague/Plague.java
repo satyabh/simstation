@@ -51,7 +51,7 @@ public class Plague extends World {
     public static int INITIAL_INFECTED = 10;
     public static int INITIAL_POPULATION_SIZE = 50;
     public static int RECOVERY_FATALITY_TIME = 50;
-    public static boolean FATAL = true; // % chance of infection
+    public static boolean FATAL = true; // whether the end of infection lifespan kills the Person
     public static int VIRULENCE = 50; // % chance of infection
     // public static int RESISTANCE = 2; // % chance of resisting infection
     // RESISTANCE comes from assignment's page example, but Idk what to do with it 😭
