@@ -14,7 +14,7 @@ class SetGreed extends Command {
             String response = Utilities.ask("Greed = ?");
             value = Integer.valueOf(response);
         }
-        Meadow.GREED = value;
+        ((Meadow)model).setGreed(value);
     }
 }
 
@@ -28,7 +28,7 @@ class SetGrowbackRate extends Command {
             String response = Utilities.ask("Grow back rate = ?");
             value = Integer.valueOf(response);
         }
-        Meadow.GROWBACK_RATE = value;
+        ((Meadow)model).SetGrowbackRate(value);
     }
 }
 

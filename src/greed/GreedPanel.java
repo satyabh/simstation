@@ -22,10 +22,10 @@ class GreedPanel extends WorldPanel implements ChangeListener {
         panelButtons.setLayout(new GridLayout(6, 1));
         panelButtons.setOpaque(false);
 
-        sliders[0] = new JSlider(JSlider.HORIZONTAL, 0, 100, Meadow.GREED);
+        sliders[0] = new JSlider(JSlider.HORIZONTAL, 0, 100, Cow.greediness);
         sliders[0].setLabelTable(sliders[0].createStandardLabels(10));
         
-        sliders[1] = new JSlider(JSlider.HORIZONTAL, 0, 10, Meadow.GROWBACK_RATE);
+        sliders[1] = new JSlider(JSlider.HORIZONTAL, 0, 10, Patch.growBackRate);
         sliders[1].setMajorTickSpacing(3);
         sliders[1].setLabelTable(sliders[1].createStandardLabels(2));
 
@@ -65,10 +65,10 @@ class GreedPanel extends WorldPanel implements ChangeListener {
 
     public void stateChanged(ChangeEvent e) {
         if (e.getSource() == sliders[0]) {
-            Meadow.GREED = sliders[0].getValue();
+            ((Meadow)model).setGreed(sliders[1].getValue());
         }
         if (e.getSource() == sliders[1]) {
-            Meadow.GROWBACK_RATE = sliders[1].getValue();
+            ((Meadow)model).SetGrowbackRate(sliders[1].getValue());
         }
         if (e.getSource() == sliders[2]) {
             ((Meadow)model).setMoveEnergy(sliders[2].getValue());
@@ -78,8 +78,8 @@ class GreedPanel extends WorldPanel implements ChangeListener {
     }
 
     public void update() {
-        sliders[0].setValue(Meadow.GREED);
-        sliders[1].setValue(Meadow.GROWBACK_RATE);
+        sliders[0].setValue(Cow.greediness);
+        sliders[1].setValue(Patch.growBackRate);
         sliders[2].setValue(Meadow.moveEnergy);
         repaint();
     }
