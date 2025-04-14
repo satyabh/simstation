@@ -12,6 +12,7 @@ public class Meadow extends World {
     public static int moveEnergy = 10;
     public static int numCows = 50;
     public static int dim = SIZE / Patch.patchSize;
+    public static final int WAIT_PENALTY = 1;
 
     public Patch getPatch(int xc, int yc) {
         for (Agent agent : this.agents) {
