@@ -10,25 +10,18 @@ import java.util.List;
 
 class Cow extends MobileAgent {
     int energy;
-    int greediness;
+    static int greediness = 25;
 
-    public Cow(int energy, int greediness) {
+    public Cow(int energy) {
         super();
         this.energy = energy;
-        this.greediness = greediness;
     }
 
     public void update() {
-        // Energy usage
-        if (energy <= 0) this.stop();
-
         /* Patch interaction */
         Patch curPatch = ((Meadow)this.world).getPatch(this.xc, this.yc);
         if (curPatch != null) {
-            curPatch.eatMe(this, this.greediness);
-        } else {
-            System.out.println("Not detecting a patch correctly");
-            System.out.println(this.xc + " " + this.yc);
+            curPatch.eatMe(this, greediness);
         }
 
         /* Movement */ 
@@ -37,30 +30,35 @@ class Cow extends MobileAgent {
             this.energy -= Meadow.moveEnergy;
             heading = Heading.random();
             move(Patch.patchSize);
-            // Snap
-            if (this.getX() == World.SIZE - 1) this.xc = World.SIZE - Patch.patchSize;
-            if (this.getY() == World.SIZE - 1) this.yc = World.SIZE - Patch.patchSize;
+            // Snap to patch
+            if (this.getX() % Patch.patchSize != 0 ) this.xc = curPatch.getX();
+            if (this.getY() % Patch.patchSize != 0 ) this.yc = curPatch.getY();
         } 
         // Otherwise, as cow waits, slowly deplete its energy
         else this.energy--;
 
+        if (energy <= 0) {
+            this.stop();
+            return;
+        }
     }
 }
 
 class Patch extends Agent {
     int energy;
-    int growBackRate;
+    public static int growBackRate = 1;
     public static int patchSize = 12;
 
-    public Patch(int energy, int growBackRate) {
+    public Patch(int energy) {
         super();
         this.energy = energy;
-        this.growBackRate = growBackRate;
     }
 
     public void update() {
-        // Energy usage
-        if (energy <= 0) this.stop();
+        if (energy <= 0) {
+            this.stop();
+            return;
+        }
 
         // Energy grow
         if (!this.stopped && this.energy < 100) {
@@ -84,12 +82,16 @@ public class Meadow extends World {
     public static int moveEnergy = 10;
     public static int numCows = 50;
     public static int dim = SIZE / Patch.patchSize;
-    public static int GREED = 30;
-    public static int GROWBACK_RATE = 1;
 
     public Patch getPatch(int xc, int yc) {
         for (Agent agent : this.agents) {
-            if (agent instanceof Patch && agent.getX() == xc && agent.getY() == yc) return (Patch) agent;
+            if (
+                agent instanceof Patch && 
+                agent.getX() <= xc &&
+                agent.getX() + Patch.patchSize >= xc &&
+                agent.getY() <= yc &&
+                agent.getY() + Patch.patchSize >= yc
+            ) return (Patch) agent;
         }
         return null;
     }
@@ -98,7 +100,7 @@ public class Meadow extends World {
         // Patches
         for(int r = 0; r < SIZE; r += Patch.patchSize) {
             for (int c = 0; c < SIZE; c += Patch.patchSize) {
-                Patch patch = new Patch(100, GROWBACK_RATE);
+                Patch patch = new Patch(100);
                 patch.setPosition(c, r);
                 addAgent(patch);
             }
@@ -110,7 +112,7 @@ public class Meadow extends World {
         for (int i = 0; i < numCows && i < copyOfPatchesAgents.size(); i++) {
             Agent a = copyOfPatchesAgents.get(i);
 
-            Cow cow = new Cow(100, GREED);
+            Cow cow = new Cow(100);
             cow.setPosition(a.getX(), a.getY());
             addAgent(cow);
         }
@@ -118,6 +120,14 @@ public class Meadow extends World {
 
     public void setMoveEnergy(int value) {
         moveEnergy = value;
+        changed();
+    }
+    public void SetGrowbackRate(int value) {
+        Patch.growBackRate = value;
+        changed();
+    }
+    public void setGreed(int value) {
+        Cow.greediness = value;
         changed();
     }
 
