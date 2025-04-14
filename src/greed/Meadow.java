@@ -1,81 +1,11 @@
 package greed;
 
-import mvc.*;
 import simstation.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-class Cow extends MobileAgent {
-    int energy;
-    static int greediness = 25;
-
-    public Cow(int energy) {
-        super();
-        this.energy = energy;
-    }
-
-    public void update() {
-        /* Patch interaction */
-        Patch curPatch = ((Meadow)this.world).getPatch(this.xc, this.yc);
-        if (curPatch != null) {
-            curPatch.eatMe(this, greediness);
-        }
-
-        /* Movement */ 
-        // Spend moveEnergy if possible
-        if (this.energy >= Meadow.moveEnergy) {
-            this.energy -= Meadow.moveEnergy;
-            heading = Heading.random();
-            move(Patch.patchSize);
-            // Snap to patch
-            if (this.getX() % Patch.patchSize != 0 ) this.xc = curPatch.getX();
-            if (this.getY() % Patch.patchSize != 0 ) this.yc = curPatch.getY();
-        } 
-        // Otherwise, as cow waits, slowly deplete its energy
-        else this.energy--;
-
-        if (energy <= 0) {
-            this.stop();
-            return;
-        }
-    }
-}
-
-class Patch extends Agent {
-    int energy;
-    public static int growBackRate = 1;
-    public static int patchSize = 12;
-
-    public Patch(int energy) {
-        super();
-        this.energy = energy;
-    }
-
-    public void update() {
-        if (energy <= 0) {
-            this.stop();
-            return;
-        }
-
-        // Energy grow
-        if (!this.stopped && this.energy < 100) {
-            this.energy += growBackRate;
-            if (this.energy > 100) this.energy = 100;
-        }
-    }
-
-    public void eatMe(Cow cow, int amt) {
-        // Assuming cow only eats patch if cow is hungry enough to eat amt
-        if (this.energy >= amt && cow.energy >= (cow.energy - amt)) {
-            this.energy -= amt;
-            if (this.energy < 0 ) this.energy = 0;
-            cow.energy += amt;
-        }
-    }
-}
 
 public class Meadow extends World {
     public static int waitPenalty = 5;
@@ -163,14 +93,5 @@ public class Meadow extends World {
         stats[3] = "% Cows alive = " + String.format("%.2f", totalCowsAlive() / totalCowsCount() * 100);
         stats[4] = "% Patches alive = " + String.format("%.2f", totalPatchesAlive() / totalPatchesCount() * 100);
         return new ArrayList<>(Arrays.asList(stats));
-    }
-
-    public static void main(String[] args) {
-        AppPanel panel = new GreedPanel(new GreedFactory());
-
-        panel.display();
-        // JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(panel);
-        // frame.pack();
-        // frame.setResizable(false);
     }
 }

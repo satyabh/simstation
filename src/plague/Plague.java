@@ -7,48 +7,6 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-class Person extends MobileAgent {
-    boolean infected;
-    int infectedStartClock;
-    boolean dead = false;
-
-    public Person(boolean infected) {
-        super();
-        this.infected = infected;
-        if (this.infected) this.infectedStartClock = 0;
-    }
-
-    public void update() {
-        Person neighbor = (Person) world.getNeighbor(this, 10);
-
-        // Infect neighbor
-        if (this.infected && neighbor != null && !neighbor.isInfected()) {
-            if (Math.random() < (Plague.VIRULENCE / 100.0)) { // infection attempts to infect person
-                if (Math.random() > Plague.RESISTANCE / 100.0) { // person has a second chance, usually low
-                    ((Person)neighbor).setInfected(true);
-                    ((Person)neighbor).setInfectedStartClock(world.getClock());
-                }
-            }
-        }
-
-        // Fatality / Recovery
-        if (this.infected && this.world.getClock() >= this.infectedStartClock + Plague.RECOVERY_FATALITY_TIME) {
-            this.setInfected(false);
-            if (Plague.FATAL) {
-                this.dead = true;
-                this.stop(); 
-            }
-        }
-
-        heading = Heading.random();
-        move(4);
-    }
-
-    public boolean isInfected() { return infected; }
-    public void setInfected(boolean infected) { this.infected = infected; }
-    private void setInfectedStartClock(int clock) { this.infectedStartClock = clock; }
-}
-
 public class Plague extends World {
     public static int INITIAL_INFECTED = 10;
     public static int INITIAL_POPULATION_SIZE = 50;
@@ -100,14 +58,5 @@ public class Plague extends World {
         stats[1] = "#clock = " + this.clock;
         stats[2] = "% infected = " + String.format("%.2f", infectedPercentage());
         return new ArrayList<>(Arrays.asList(stats));
-    }
-
-    public static void main(String[] args) {
-        AppPanel panel = new PlaguePanel(new PlagueFactory());
-
-        panel.display();
-        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(panel);
-        frame.pack();
-        frame.setResizable(false);
     }
 }
