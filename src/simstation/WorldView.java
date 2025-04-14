@@ -19,11 +19,13 @@ public class WorldView extends View {
         super.paintComponent(gc);
         World world = (World)model;
         Graphics2D gc2d = (Graphics2D)gc;
-
+        // scale factors
+        double xScale = getWidth() / (double) World.SIZE;
+        double yScale = getHeight() / (double) World.SIZE;
+        gc2d.scale(xScale, yScale);
         // Draw a border around the world
         gc2d.setColor(Color.BLUE);
         gc2d.drawRect(0, 0, World.SIZE - 1, World.SIZE - 1);
-
         // Draw agents
         for (Iterator<Agent> it = world.iterator(); it.hasNext(); ) {
             Agent agent = it.next();
