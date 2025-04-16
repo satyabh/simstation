@@ -1,5 +1,7 @@
 package prisoner;
 
-public interface CooperationStrategy {
+import java.io.Serializable;
+
+public interface CooperationStrategy extends Serializable {
     boolean cooperate(Prisoner prisoner);
 }
