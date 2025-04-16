@@ -1,71 +1,47 @@
+// Cow.java
 package greed;
 
 import simstation.Heading;
 import simstation.MobileAgent;
 
-class Cow extends MobileAgent {
+public class Cow extends MobileAgent {
     int energy;
-    static int greediness = 25;
 
-    public Cow(int energy) {
+    public Cow(int initialEnergy) {
         super();
-        this.energy = energy;
+        this.energy = initialEnergy;
     }
 
     @Override
     public void update() {
         Meadow meadow = (Meadow) this.world;
-        Patch curPatch = meadow.getPatch(this.xc, this.yc);
-        if (curPatch != null) {
-            // Cow attempts to lock patch by passing itself
-            boolean locked = curPatch.tryLock(this);
-            if (!locked) {
-                // Patch was unavailable, cow looks to move if it has enough energy
-                if (this.energy >= Meadow.moveEnergy) {
-                    this.energy -= Meadow.moveEnergy;
-                    heading = Heading.random();
-                    move(Patch.patchSize);
-                    return; // Skip eating for this tick
-                } else {
-                    // Cow does not have enough energy to move, so it waits
-                    curPatch.waitForLock(this); // Join the wait
-                    if (this.energy <= 0) {
-                        // Starves from waiting too long
-                        stop();
-                        return;
-                    }
-                }
+        Patch cur = meadow.getPatch(this.xc, this.yc);  // assume non-null
+
+        if (cur != null) {
+            // If patch can't satisfy greed and cow can move, move on
+            if (cur.getEnergy() < Meadow.COW_GREEDINESS
+                    && this.energy >= Meadow.MOVE_ENERGY) {
+                this.energy -= Meadow.MOVE_ENERGY;
+                heading = Heading.random();
+                move(Meadow.PATCH_SIZE);
             }
-            // Now the cow has obtained the patch's lock
-            curPatch.eatMe(this, greediness);
-            curPatch.unlock(this); // Release for other cows
-        }
-        /* Movement */
-        // Spend moveEnergy if possible to move to a new patch
-        if (this.energy >= Meadow.moveEnergy) {
-            this.energy -= Meadow.moveEnergy;
-            heading = Heading.random();
-            move(Patch.patchSize);
-            // Snap to patch alignment
-            if (this.getX() % Patch.patchSize != 0)
-                this.xc = curPatch.getX();
-            if (this.getY() % Patch.patchSize != 0)
-                this.yc = curPatch.getY();
-        } else {
-            // Cow does not have energy to move
-            try {
-                Thread.sleep(20);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+            else {
+                // otherwise, just call eatMe and let the patch block/wait as needed
+                cur.eatPatch(this, Meadow.COW_GREEDINESS);
             }
-            this.loseEnergy(Meadow.WAIT_PENALTY);
         }
-        if (this.energy <= 0) { // Corrected condition
+
+        // death check
+        if (this.energy <= 0) stop();
+    }
+    public void loseEnergy(int amount) {
+        energy -= amount;
+        if (energy < 0) {
+            energy = 0;
+        }
+        if (energy == 0) {
             stop();
         }
     }
 
-    public void loseEnergy(int amount) {
-        this.energy -= amount;
-    }
 }

@@ -1,58 +1,53 @@
 package greed;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-
-import simstation.Agent;
+import java.awt.*;
+import javax.swing.*;
 import simstation.World;
 import simstation.WorldView;
+import simstation.Agent;
 
 public class GreedView extends WorldView {
-    private static int COW_SIZE = 6;
+    private static final int COW_SIZE = 6;
+
     public GreedView(World world) {
         super(world);
     }
 
     @Override
+    public void paintComponent(Graphics g) {
+        // 1) compute scale factors
+        Dimension size = getSize();
+        double sx = size.getWidth()  / (double)World.SIZE;
+        double sy = size.getHeight() / (double)World.SIZE;
+        Graphics2D g2 = (Graphics2D) g.create();
+        g2.scale(sx, sy);
+        super.paintComponent(g2);
+
+        g2.dispose();
+    }
+
+    @Override
     protected void drawAgent(Agent a, Graphics gc) {
-        // Cows
+        Graphics2D g = (Graphics2D) gc;
         if (a instanceof Cow) {
-            Color oldColor = gc.getColor();
-            // if (((Cow)a).dead) return;
-            Graphics2D gc2d = (Graphics2D)gc;
-            gc2d.setColor(Color.RED);
-            if (((Cow)a).energy <= 0) gc2d.setColor(Color.WHITE);
-            gc2d.fillOval(
-                a.getX() - COW_SIZE/2,
-                a.getY() - COW_SIZE/2,
-                COW_SIZE,
-                COW_SIZE
-            );
+            // draw cow at center of its cell
+            int cellX = a.getX();
+            int cellY = a.getY();
+            int half = Meadow.PATCH_SIZE/2;
 
-            gc.setColor(oldColor);
+            int cx = cellX + half;
+            int cy = cellY + half;
+
+            g.setColor(((Cow)a).energy > 0 ? Color.RED : Color.WHITE);
+            g.fillOval(cx - COW_SIZE/2, cy - COW_SIZE/2, COW_SIZE, COW_SIZE);
         }
-
-        // Patches
-        if (a instanceof Patch) {
-            Color oldColor = gc.getColor();
-            Graphics2D gc2d = (Graphics2D)gc;
-            gc2d.setColor(new Color(0, 50 + ((Patch)a).energy, 0));
-            gc2d.fillRect(
-                a.getX() - Patch.patchSize/2,
-                a.getY() - Patch.patchSize/2,
-                Patch.patchSize,
-                Patch.patchSize
-            );
-            gc2d.setColor(Color.WHITE);
-            gc2d.drawRect(
-                a.getX() - Patch.patchSize/2,
-                a.getY() - Patch.patchSize/2,
-                Patch.patchSize,
-                Patch.patchSize
-            );
-
-            gc.setColor(oldColor);
+        else if (a instanceof Patch) {
+            Patch p = (Patch) a;
+            Color shade = new Color(0, 50 + p.getEnergy(), 0);
+            g.setColor(shade);
+            g.fillRect(a.getX(), a.getY(), Meadow.PATCH_SIZE, Meadow.PATCH_SIZE);
+            g.setColor(Color.WHITE);
+            g.drawRect(a.getX(), a.getY(), Meadow.PATCH_SIZE, Meadow.PATCH_SIZE);
         }
     }
 }
