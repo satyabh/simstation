@@ -28,7 +28,7 @@ class SetGrowbackRate extends Command {
             String response = Utilities.ask("Grow back rate = ?");
             value = Integer.valueOf(response);
         }
-        ((Meadow)model).SetGrowbackRate(value);
+        ((Meadow)model).setGrowbackRate(value);
     }
 }
 

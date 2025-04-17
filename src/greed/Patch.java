@@ -2,35 +2,51 @@ package greed;
 
 import simstation.Agent;
 
-class Patch extends Agent {
-    int energy;
-    public static int growBackRate = 1;
-    public static int patchSize = 12;
+public class Patch extends Agent {
+    private int energy;
 
-    public Patch(int energy) {
+    public Patch(int initialEnergy) {
         super();
-        this.energy = energy;
+        this.energy = initialEnergy;
     }
 
-    public void update() {
-        if (energy <= 0) {
-            this.stop();
-            return;
+    public synchronized void eatMe(Cow cow, int amt) {
+        while (energy < amt) {
+            cow.loseEnergy(Meadow.WAIT_PENALTY);
+            if (cow.energy <= 0) {
+                cow.stop();
+                return;
+            }
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return;
+            }
         }
-
-        // Energy grow
-        if (!this.stopped && this.energy < 100) {
-            this.energy += growBackRate;
-            if (this.energy > 100) this.energy = 100;
+        energy -= amt;
+        cow.energy += amt;
+        if (energy < 0) {
+            energy = 0;
         }
+        notifyAll();
     }
 
-    public void eatMe(Cow cow, int amt) {
-        // Assuming cow only eats patch if cow is hungry enough to eat amt
-        if (this.energy >= amt && cow.energy >= (cow.energy - amt)) {
-            this.energy -= amt;
-            if (this.energy < 0 ) this.energy = 0;
-            cow.energy += amt;
+    @Override
+    public synchronized void update() {
+        // Regrow only if patch is still “alive”
+        if (energy > 0 && energy < Meadow.MAX_ENERGY) {
+            energy += Meadow.PATCH_GROWBACK_RATE;
+            if (energy > Meadow.MAX_ENERGY) {
+                energy = Meadow.MAX_ENERGY;
+            }
         }
+        // Notify all waiting cows that energy may have changed
+        notifyAll();
     }
+
+    public synchronized int getEnergy() {
+        return energy;
+    }
+
 }
