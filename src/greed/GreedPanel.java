@@ -65,7 +65,7 @@ class GreedPanel extends WorldPanel implements ChangeListener {
 
     public void stateChanged(ChangeEvent e) {
         if (e.getSource() == sliders[0]) {
-            ((Meadow)model).setGreed(sliders[1].getValue());
+            ((Meadow)model).setGreed(sliders[0].getValue()); //was using sliders[1].getValue()
         }
         if (e.getSource() == sliders[1]) {
             ((Meadow)model).setGrowbackRate(sliders[1].getValue());
@@ -80,7 +80,7 @@ class GreedPanel extends WorldPanel implements ChangeListener {
     public void update() {
         sliders[0].setValue(Meadow.COW_GREEDINESS);
         sliders[1].setValue(Meadow.PATCH_GROWBACK_RATE);
-        sliders[2].setValue(Meadow.COW_GREEDINESS);
+        sliders[2].setValue(Meadow.MOVE_ENERGY); // was using COW_GREEDINESS
         repaint();
     }
 }
