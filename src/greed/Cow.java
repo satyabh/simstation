@@ -27,7 +27,7 @@ public class Cow extends MobileAgent {
             }
             else {
                 // otherwise, just call eatMe and let the patch block/wait as needed
-                cur.eatPatch(this, Meadow.COW_GREEDINESS);
+                cur.eatMe(this, Meadow.COW_GREEDINESS);
             }
         }
 

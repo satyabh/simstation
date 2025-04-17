@@ -10,7 +10,7 @@ public class Patch extends Agent {
         this.energy = initialEnergy;
     }
 
-    public synchronized void eatPatch(Cow cow, int amt) {
+    public synchronized void eatMe(Cow cow, int amt) {
         while (energy < amt) {
             cow.loseEnergy(Meadow.WAIT_PENALTY);
             if (cow.energy <= 0) {
