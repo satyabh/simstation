@@ -11,10 +11,10 @@ public class Meadow extends World {
     public static volatile int MOVE_ENERGY = 10;         // Energy cost for moving
     public static volatile int COW_GREEDINESS = 25;       // How much energy a cow eats
     public static volatile int PATCH_GROWBACK_RATE = 1;
-    public static int MAX_ENERGY = 100;// Energy growth per update for a patch
-    public static int WAIT_PENALTY = 1;           // Energy cost for waiting
-    public static int numCows = 25;
-    public static int PATCH_SIZE = 24;            // Dimensions of each patch
+    public static int MAX_ENERGY = 100;             // Energy growth per update for a patch
+    public static int WAIT_PENALTY = 1;             // Energy cost for waiting
+    public static int numCows = 50;
+    public static int PATCH_SIZE = 12;               // Dimensions of each patch
 
     // Returns the patch that covers the given coordinates
     public Patch getPatch(int xc, int yc) {
